@@ -14,39 +14,58 @@ interface BeforeInstallPromptEvent extends Event {
 const PWAInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [isAndroid, setIsAndroid] = useState(false);
 
   useEffect(() => {
-    const handleBeforeInstallPrompt = (e: Event) => {
-      // Prevent the default browser mini-infobar from appearing on mobile
-      e.preventDefault();
-      // Stash the event so it can be triggered later.
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      // Show the install banner after a short delay
-      setTimeout(() => {
+    const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+    const isAndroidDevice = /android/i.test(userAgent);
+    setIsAndroid(isAndroidDevice);
+
+    if (isAndroidDevice) {
+      // Automatically show the APK download prompt for Android users after a short delay
+      const timer = setTimeout(() => {
         setIsVisible(true);
       }, 3000);
-    };
+      return () => clearTimeout(timer);
+    } else {
+      // Use standard PWA installation prompt for other devices (iOS / Desktop)
+      const handleBeforeInstallPrompt = (e: Event) => {
+        e.preventDefault();
+        setDeferredPrompt(e as BeforeInstallPromptEvent);
+        setTimeout(() => {
+          setIsVisible(true);
+        }, 3000);
+      };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
-    // Check if the app is already installed/running in standalone mode
-    if (window.matchMedia("(display-mode: standalone)").matches) {
-      setIsVisible(false);
+      if (window.matchMedia("(display-mode: standalone)").matches) {
+        setIsVisible(false);
+      }
+
+      return () => {
+        window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      };
     }
-
-    return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    };
   }, []);
 
   const handleInstallClick = async () => {
+    if (isAndroid) {
+      // Directly download the compiled native Android APK hosted on Vercel
+      const link = document.createElement("a");
+      link.href = "/SRECIEEE.apk";
+      link.download = "SRECIEEE.apk";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setIsVisible(false);
+      return;
+    }
+
     if (!deferredPrompt) return;
-    // Show the install prompt
     deferredPrompt.prompt();
-    // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
     console.log(`User response to the install prompt: ${outcome}`);
-    // We've used the prompt, and can't use it again, discard it
     setDeferredPrompt(null);
     setIsVisible(false);
   };
@@ -57,7 +76,7 @@ const PWAInstallPrompt = () => {
 
   return (
     <AnimatePresence>
-      {isVisible && deferredPrompt && (
+      {isVisible && (isAndroid || deferredPrompt) && (
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -71,8 +90,14 @@ const PWAInstallPrompt = () => {
                 <Download size={22} />
               </div>
               <div>
-                <h3 className="font-semibold text-sm tracking-wide">Install SREC IEEE</h3>
-                <p className="text-[11px] text-white/75 mt-0.5">Add to your home screen for fast, offline access!</p>
+                <h3 className="font-semibold text-sm tracking-wide">
+                  {isAndroid ? "Install Android App" : "Install SREC IEEE"}
+                </h3>
+                <p className="text-[11px] text-white/75 mt-0.5">
+                  {isAndroid 
+                    ? "Get the official native Android App (APK) for your phone!" 
+                    : "Add to your home screen for fast, offline access!"}
+                </p>
               </div>
             </div>
             <button
@@ -86,7 +111,7 @@ const PWAInstallPrompt = () => {
             onClick={handleInstallClick}
             className="w-full py-2 bg-white text-[#002855] hover:bg-white/95 active:scale-[0.98] transition-all font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg"
           >
-            Install App
+            {isAndroid ? "Download APK" : "Install App"}
           </button>
         </motion.div>
       )}
