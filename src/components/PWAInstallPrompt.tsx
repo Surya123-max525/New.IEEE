@@ -63,7 +63,7 @@ const PWAInstallPrompt = () => {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 50, scale: 0.95 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed bottom-6 left-6 right-6 md:left-auto md:right-6 md:max-w-sm z-[99] bg-[#002855] border border-white/10 text-white p-4 rounded-2xl shadow-2xl flex flex-col gap-3 backdrop-blur-md bg-opacity-95"
+          className="fixed bottom-6 left-6 w-[220px] sm:w-[280px] md:w-auto md:max-w-sm z-[99] bg-[#002855] border border-white/10 text-white p-4 rounded-2xl shadow-2xl flex flex-col gap-3 backdrop-blur-md bg-opacity-95"
         >
           <div className="flex justify-between items-start">
             <div className="flex gap-3 items-center">
