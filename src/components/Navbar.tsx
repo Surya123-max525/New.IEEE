@@ -54,7 +54,7 @@ const Navbar = () => {
             <div className={`xl:hidden absolute right-4 md:right-10 flex items-center z-[70] transition-all duration-1000 ${hideLogos ? 'top-1/2 -translate-y-1/2' : 'top-5 md:top-6'}`}>
                <button 
                   onClick={() => setOpen(true)}
-                  className="p-2 rounded-xl transition-all shadow-sm bg-white/10 backdrop-blur-md border border-white/20 text-white hover:text-white/80"
+                  className="p-2 rounded-xl transition-all shadow-md bg-[#002855] text-white hover:bg-[#001f42] active:scale-95"
                >
                   <Menu size={28} className="md:w-8 md:h-8" />
                </button>
@@ -71,7 +71,7 @@ const Navbar = () => {
                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                className="w-full bg-white origin-top relative z-50 overflow-hidden shadow-md"
             >
-               <div className="grid grid-cols-3 items-center w-full px-4 lg:px-12 py-3 md:py-4 gap-4">
+               <div className="grid grid-cols-3 items-center w-full pl-4 pr-16 xl:px-12 py-3 md:py-4 gap-2 md:gap-4">
                   <div className="flex justify-start">
                      <img src={srecLogo} alt="SREC" className="h-12 sm:h-14 md:h-20 lg:h-24 w-auto object-contain flex-shrink-0" />
                   </div>
