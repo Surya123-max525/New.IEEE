@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Capacitor } from "@capacitor/core";
+import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 
 import Index from "./pages/Index";
 import OfficeBearersPage from "./pages/OfficeBearersPage";
@@ -49,6 +50,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <SpeedInsights />
+        <PWAInstallPrompt />
         <RouterComponent>
           <Routes>
             <Route path="/" element={<Index />} />
