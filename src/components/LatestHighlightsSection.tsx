@@ -19,8 +19,7 @@ const LatestHighlightsSection = () => {
       const { data } = await supabase
         .from("activities")
         .select("*")
-        .order("year", { ascending: false })
-        .order("sno", { ascending: true }) // Or date if they have a proper date field
+        .order("s_no", { ascending: false })
         .limit(3);
       return data || [];
     }
