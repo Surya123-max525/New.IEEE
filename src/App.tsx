@@ -39,18 +39,19 @@ import ReportsPage from "./pages/ReportsPage.tsx";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  // Use HashRouter for native app platforms to prevent WebView routing failures,
-  // and BrowserRouter for web platforms (like Vercel) to maintain clean URLs.
-  const RouterComponent = Capacitor.isNativePlatform() ? HashRouter : BrowserRouter;
+// Use HashRouter for native app platforms to prevent WebView routing failures,
+// and BrowserRouter for web platforms (like Vercel) to maintain clean URLs.
+// Declared outside to prevent React from recreating the component definition on every render loop.
+const RouterComponent = Capacitor.isNativePlatform() ? HashRouter : BrowserRouter;
 
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <SpeedInsights />
-        <PWAInstallPrompt />
+        {!Capacitor.isNativePlatform() && <SpeedInsights />}
+        {!Capacitor.isNativePlatform() && <PWAInstallPrompt />}
         <RouterComponent>
           <Routes>
             <Route path="/" element={<Index />} />
