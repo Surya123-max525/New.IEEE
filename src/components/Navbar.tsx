@@ -79,7 +79,7 @@ const Navbar = () => {
                      <img src={srecLogo} alt="SREC" className="h-30 sm:h-24 md:h-32 lg:h-36 w-auto object-contain flex-shrink-0" />
                   </div>
                   <div className="flex justify-center items-center">
-                     <img src={ieeeLogo} alt="IEEE" className="h-30 sm:h-24 md:h-32 lg:h-36 w-auto object-contain flex-shrink-0" />
+                     <img src={ieeeLogo} alt="IEEE" className="h-50 sm:h-24 md:h-32 lg:h-36 w-auto object-contain flex-shrink-0" />
                   </div>
                   <div className="flex justify-center items-center">
                      <img src={snrLogo} alt="SNR Trust" className="h-20 sm:h-24 md:h-32 lg:h-36 w-auto object-contain flex-shrink-0" />
